@@ -1,5 +1,5 @@
 FROM centos:centos7
-MAINTAINER judexzhu
+MAINTAINER ammarqqqq
 
 RUN yum -y update \ 
         && yum clean all \
