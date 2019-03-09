@@ -34,7 +34,7 @@ def helmDeploy(Map args) {
 node {
     
     // Setup the Docker Registry (Docker Hub) + Credentials 
-    registry_url = "http://docker.io" //"https://index.docker.io/v1/" // Docker Hub
+    registry_url = "https://index.docker.io/v1/" // Docker Hub
     docker_creds_id = "dockerhub" // name of the Jenkins Credentials ID
     build_tag = "1.0" // default tag to push for to the registry
     
@@ -52,7 +52,7 @@ node {
     docker.withRegistry("${registry_url}", "${docker_creds_id}") {
     
         // Set up the container to build 
-        maintainer_name = "ammar"
+        maintainer_name = "ammarqqqq"
         container_name = "nginx-test"
         
 
