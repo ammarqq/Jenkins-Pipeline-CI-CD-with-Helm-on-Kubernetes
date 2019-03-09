@@ -35,14 +35,14 @@ node {
     
     // Setup the Docker Registry (Docker Hub) + Credentials 
     registry_url = "https://index.docker.io/v1/" // Docker Hub
-    docker_creds_id = "judexzhu-DockerHub" // name of the Jenkins Credentials ID
+    docker_creds_id = "dockerhub" // name of the Jenkins Credentials ID
     build_tag = "1.0" // default tag to push for to the registry
     
     def pwd = pwd()
     def chart_dir = "${pwd}/charts/newegg-nginx"
         
     stage 'Checking out GitHub Repo'
-    git url: 'https://github.com/judexzhu/Jenkins-Pipeline-CI-CD-with-Helm-on-Kubernetes.git'
+    git url: 'https://github.com/ammarqq/Jenkins-Pipeline-CI-CD-with-Helm-on-Kubernetes.git'
     
     def inputFile = readFile('config.json')
     def config = new groovy.json.JsonSlurperClassic().parseText(inputFile)
@@ -52,7 +52,7 @@ node {
     docker.withRegistry("${registry_url}", "${docker_creds_id}") {
     
         // Set up the container to build 
-        maintainer_name = "judexzhu"
+        maintainer_name = "ammar"
         container_name = "nginx-test"
         
 
