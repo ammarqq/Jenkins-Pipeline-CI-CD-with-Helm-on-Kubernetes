@@ -3,7 +3,7 @@ MAINTAINER ammarqqqq
 
 RUN apt-get -y update \ 
         && apt-get clean all \
-        && yum install -y nginx iproute
+        && apt-get install -y nginx iproute
 
 EXPOSE 80
 COPY index.html /usr/share/nginx/html/

@@ -67,6 +67,7 @@ node(label) {
     println "pipeline config ==> ${config}"
     
     stage 'Building Nginx Container for Docker Hub'
+    container('docker'){
     docker.withRegistry("${registry_url}", "${docker_creds_id}") {
     
         // Set up the container to build 
@@ -77,7 +78,7 @@ node(label) {
         stage "Building"
         
         echo "Building Nginx with docker.build(${maintainer_name}/${container_name}:${build_tag})"
-        container('docker'){
+        
         container = docker.build("${maintainer_name}/${container_name}:${build_tag}", '.')
         
         try {
