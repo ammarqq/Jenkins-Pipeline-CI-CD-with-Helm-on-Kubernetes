@@ -229,7 +229,10 @@ helmDeploy(
     // 2. Make sure to set the Pipeline's "Throttle builds" to 1 because the docker containers will collide on resources like ports and names
     // 3. Should be able to parallelize the docker.withRegistry() methods to ensure the container is running on the slave
     // 4. After the tests finish (and before they start), clean up container images to prevent stale docker image builds from affecting the current test run
+
 }
-}
+   externalMethod.publishStatusReports()
+} catch (exception) {
+            throw exception
         }
 }
