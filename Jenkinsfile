@@ -1,6 +1,6 @@
 #!groovy
 def label = "worker-${UUID.randomUUID().toString()}"
-podTemplate(label: 'jenkins-pipeline', containers: [
+podTemplate(label: label, containers: [
     containerTemplate(name: 'jnlp', image: 'lachlanevenson/jnlp-slave:3.10-1-alpine', args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins', resourceRequestCpu: '200m', resourceLimitCpu: '300m', resourceRequestMemory: '256Mi', resourceLimitMemory: '512Mi'),
     containerTemplate(name: 'docker', image: 'docker:1.12.6', command: 'cat', ttyEnabled: true),
     containerTemplate(name: 'golang', image: 'golang:1.8.3', command: 'cat', ttyEnabled: true),
@@ -48,7 +48,8 @@ volumes:[
 
 
 
-node {
+node(label) {
+
     
     // Setup the Docker Registry (Docker Hub) + Credentials 
     registry_url = "https://index.docker.io/v1/" // Docker Hub
@@ -182,15 +183,15 @@ node {
      
 
     // run dry-run helm chart installation
-      helmDeploy(
-        dry_run       : true,
-        name          : config.app.name,
-        chart_dir     : chart_dir,
-        tag           : build_tag,
-        replicas      : config.app.replicas,
-        cpu           : config.app.cpu,
-        memory        : config.app.memory
-       )
+      
+       def dry_run = true
+       def name = config.app.name
+        def chart_dir = chart_dir
+        def tag  = build_tag
+        def replicas  = config.app.replicas
+        def cpu   = config.app.cpu
+        def memory  = config.app.memory
+       
         }
     }
     
@@ -209,15 +210,13 @@ node {
         echo "Application ${args.name} successfully deployed. Use helm status ${args.name} to check"
     }
 }
-helmDeploy(
-        dry_run       : false,
-        name          : config.app.name,
-        chart_dir     : chart_dir,
-        tag           : build_tag,
-        replicas      : config.app.replicas,
-        cpu           : config.app.cpu,
-        memory        : config.app.memory
-)
+       def dry_run = false
+       def name = config.app.name
+        def chart_dir = chart_dir
+        def tag  = build_tag
+        def replicas  = config.app.replicas
+        def cpu   = config.app.cpu
+        def memory  = config.app.memory
 
     }
     
