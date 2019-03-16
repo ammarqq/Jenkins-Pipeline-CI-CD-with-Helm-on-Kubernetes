@@ -1,9 +1,8 @@
-FROM centos:centos7
+FROM ubuntu:16.04
 MAINTAINER ammarqqqq
 
-RUN yum -y update \ 
-        && yum clean all \
-        && yum install -y epel-release \
+RUN apt-get -y update \ 
+        && apt-get clean all \
         && yum install -y nginx iproute
 
 EXPOSE 80
