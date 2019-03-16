@@ -24,7 +24,9 @@ volumes:[
 
 
 // }
-// def helmLint(String chart_dir) {
+ def helmLint(String chart_dir)
+ def helmDeploy(Map args)
+
 //     container('helm') {
 //     // lint helm chart
 //     sh "/usr/local/bin/helm lint ${chart_dir}"
@@ -135,13 +137,15 @@ node(label) {
     }
     }
     stage ('helm test') {
-       def dry_run = true
-       def name = config.app.name
-    //    def chart_dir = chart_dir
-       def tag  = build_tag
-       def replicas = config.app.replicas
-       def cpu = config.app.cpu
-       def memory = config.app.memory
+ helmDeploy(
+        dry_run       : true,
+        name          : config.app.name,
+        chart_dir     : chart_dir,
+        tag           : build_tag,
+        replicas      : config.app.replicas,
+        cpu           : config.app.cpu,
+        memory        : config.app.memory
+       )
         container('helm') {
     // lint helm chart
     sh "/usr/local/bin/helm lint ${chart_dir}"
@@ -156,13 +160,15 @@ node(label) {
     }
     
     stage ('helm deploy') {
-       def dry_run = false
-       def name = config.app.name
-    //    def chart_dir = chart_dir
-       def tag  = build_tag
-       def replicas  = config.app.replicas
-       def cpu = config.app.cpu
-       def memory = config.app.memory
+      helmDeploy(
+        dry_run       : false,
+        name          : config.app.name,
+        chart_dir     : chart_dir,
+        tag           : build_tag,
+        replicas      : config.app.replicas,
+        cpu           : config.app.cpu,
+        memory        : config.app.memory
+      )
       // Deploy using Helm chart
       container('helm'){
     if (args.dry_run) {
