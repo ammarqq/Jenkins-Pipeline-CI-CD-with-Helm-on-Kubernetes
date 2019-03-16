@@ -138,11 +138,11 @@ node(label) {
     }
     stage ('helm test') {
          container('helm') {
-    helmLint(String chart_dir)
+    // helmLint(String chart_dir)
  helmDeploy(
         dry_run       : true,
         name          : config.app.name,
-        // chart_dir     : chart_dir,
+        chart_dir     : chart_dir,
         tag           : build_tag,
         replicas      : config.app.replicas,
         cpu           : config.app.cpu,
@@ -163,7 +163,7 @@ node(label) {
     
     stage ('helm deploy') {
         container('helm'){
-            helmDeploy(Map args)
+      helmDeploy(Map args)
       helmDeploy(
         dry_run       : false,
         name          : config.app.name,
