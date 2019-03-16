@@ -20,12 +20,12 @@ volumes:[
 // def  kubectlTest() {
 //         // Test that kubectl can correctly communication with the Kubernetes API
 //     echo "running kubectl test"
-//     sh "kubectl get nodes"
+//     sh "kubectl get nodes"k
 
 
 // }
- def helmLint(String chart_dir)
- def helmDeploy(Map args)
+//  def helmLint(String chart_dir)
+//  def helmDeploy(Map args)
 
 //     container('helm') {
 //     // lint helm chart
