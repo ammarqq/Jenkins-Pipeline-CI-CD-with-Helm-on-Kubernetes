@@ -17,13 +17,13 @@ volumes:[
         try {
             deleteDir()
 
-def  kubectlTest() {
-        // Test that kubectl can correctly communication with the Kubernetes API
-    echo "running kubectl test"
-    sh "kubectl get nodes"
+// def  kubectlTest() {
+//         // Test that kubectl can correctly communication with the Kubernetes API
+//     echo "running kubectl test"
+//     sh "kubectl get nodes"
 
 
-}
+// }
 // def helmLint(String chart_dir) {
 //     container('helm') {
 //     // lint helm chart
