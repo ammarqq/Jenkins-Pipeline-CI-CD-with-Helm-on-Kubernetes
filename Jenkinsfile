@@ -12,14 +12,14 @@ volumes:[
     hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
 ]){
 
-def  kubectlTest() {
-    container('kubectl'){
-    // Test that kubectl can correctly communication with the Kubernetes API
-    echo "running kubectl test"
-    sh "kubectl get nodes"
+// def  kubectlTest() {
+//     container('kubectl'){
+//     // Test that kubectl can correctly communication with the Kubernetes API
+//     echo "running kubectl test"
+//     sh "kubectl get nodes"
 
-}
-}
+// }
+// }
 def helmLint(String chart_dir) {
     container('helm') {
     // lint helm chart
