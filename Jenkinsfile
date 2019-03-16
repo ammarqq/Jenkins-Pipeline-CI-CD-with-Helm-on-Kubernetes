@@ -176,6 +176,13 @@ node(label) {
     }
     }
     stage ('helm test') {
+       def dry_run = true
+       def name = config.app.name
+       def chart_dir = chart_dir
+       def tag  = build_tag
+       def replicas = config.app.replicas
+       def cpu = config.app.cpu
+       def memory = config.app.memory
         container('helm') {
     // lint helm chart
     sh "/usr/local/bin/helm lint ${chart_dir}"
@@ -184,19 +191,19 @@ node(label) {
 
     // run dry-run helm chart installation
       
-       def dry_run = true
-       def name = config.app.name
-        def chart_dir = chart_dir
-        def tag  = build_tag
-        def replicas  = config.app.replicas
-        def cpu   = config.app.cpu
-        def memory  = config.app.memory
+
        
         }
     }
     
     stage ('helm deploy') {
-      
+       def dry_run = false
+       def name = config.app.name
+       def chart_dir = chart_dir
+       def tag  = build_tag
+       def replicas  = config.app.replicas
+       def cpu = config.app.cpu
+       def memory = config.app.memory
       // Deploy using Helm chart
       container('helm'){
     if (args.dry_run) {
@@ -210,13 +217,7 @@ node(label) {
         echo "Application ${args.name} successfully deployed. Use helm status ${args.name} to check"
     }
 }
-       def dry_run = false
-       def name = config.app.name
-        def chart_dir = chart_dir
-        def tag  = build_tag
-        def replicas  = config.app.replicas
-        def cpu   = config.app.cpu
-        def memory  = config.app.memory
+
 
     }
     
