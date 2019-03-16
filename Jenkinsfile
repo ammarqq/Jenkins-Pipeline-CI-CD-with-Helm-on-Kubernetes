@@ -209,6 +209,7 @@ node {
         echo "Application ${args.name} successfully deployed. Use helm status ${args.name} to check"
     }
 }
+helmDeploy(
         dry_run       : false,
         name          : config.app.name,
         chart_dir     : chart_dir,
@@ -216,7 +217,7 @@ node {
         replicas      : config.app.replicas,
         cpu           : config.app.cpu,
         memory        : config.app.memory
-      
+)
 
     }
     
