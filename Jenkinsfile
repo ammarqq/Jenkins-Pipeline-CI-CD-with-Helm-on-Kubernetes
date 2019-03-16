@@ -94,23 +94,23 @@ node(label) {
                 // in the future this will be handy to specify waiting for a max interval: 
                 // https://issues.jenkins-ci.org/browse/JENKINS-29037
                 //
-                waitUntil {
-                    sh "ss -antup | grep 80 | grep LISTEN | wc -l | tr -d '\n' > /tmp/wait_results"
-                    wait_results = readFile '/tmp/wait_results'
+                // waitUntil {
+                //     sh "ss -antup | grep 80 | grep LISTEN | wc -l | tr -d '\n' > /tmp/wait_results"
+                //     wait_results = readFile '/tmp/wait_results'
 
-                    echo "Wait Results(${wait_results})"
-                    if ("${wait_results}" == "1")
-                    {
-                        echo "Nginx is listening on port 80"
-                        sh "rm -f /tmp/wait_results"
-                        return true
-                    }
-                    else
-                    {
-                        echo "Nginx is not listening on port 80 yet"
-                        return false
-                    }
-                } // end of waitUntil
+                //     echo "Wait Results(${wait_results})"
+                //     if ("${wait_results}" == "1")
+                //     {
+                //         echo "Nginx is listening on port 80"
+                //         sh "rm -f /tmp/wait_results"
+                //         return true
+                //     }
+                //     else
+                //     {
+                //         echo "Nginx is not listening on port 80 yet"
+                //         return false
+                //     }
+                // } // end of waitUntil
                 
                 // At this point Nginx is running
                 echo "Docker Container is running"
