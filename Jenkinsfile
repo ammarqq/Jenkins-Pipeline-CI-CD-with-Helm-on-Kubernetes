@@ -178,7 +178,7 @@ node(label) {
     stage ('helm test') {
        def dry_run = true
        def name = config.app.name
-       def chart_dir = chart_dir
+    //    def chart_dir = chart_dir
        def tag  = build_tag
        def replicas = config.app.replicas
        def cpu = config.app.cpu
@@ -199,7 +199,7 @@ node(label) {
     stage ('helm deploy') {
        def dry_run = false
        def name = config.app.name
-       def chart_dir = chart_dir
+    //    def chart_dir = chart_dir
        def tag  = build_tag
        def replicas  = config.app.replicas
        def cpu = config.app.cpu
