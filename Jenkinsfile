@@ -75,6 +75,7 @@ node(label) {
         
        
         stage "Building"
+         container('docker') {
         echo "Building Nginx with docker.build(${maintainer_name}/${container_name}:${build_tag})"
         container = docker.build("${maintainer_name}/${container_name}:${build_tag}", '.')
         try {
@@ -173,7 +174,7 @@ node(label) {
         currentBuild.result = 'SUCCESS'
         
     }
-    
+    }
     stage ('helm test') {
        def dry_run = true
        def name = config.app.name
