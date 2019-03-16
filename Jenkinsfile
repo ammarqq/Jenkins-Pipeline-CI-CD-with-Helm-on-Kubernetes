@@ -11,37 +11,40 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 volumes:[
     hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
 ]){
+        node(label) {
+        def externalMethod
 
-// def  kubectlTest() {
-//     container('kubectl'){
-//     // Test that kubectl can correctly communication with the Kubernetes API
-//     echo "running kubectl test"
-//     sh "kubectl get nodes"
+        try {
+            deleteDir()
 
+def  kubectlTest() {
+        // Test that kubectl can correctly communication with the Kubernetes API
+    echo "running kubectl test"
+    sh "kubectl get nodes"
+
+
+}
+// def helmLint(String chart_dir) {
+//     container('helm') {
+//     // lint helm chart
+//     sh "/usr/local/bin/helm lint ${chart_dir}"
+
+
+// def helmDeploy(Map args) {
+//     //configure helm client and confirm tiller process is installed
+// container('helm'){
+//     if (args.dry_run) {
+//         println "Running dry-run deployment"
+
+//         sh "/usr/local/bin/helm upgrade --dry-run --debug --install ${args.name} ${args.chart_dir} --set ImageTag=${args.tag},Replicas=${args.replicas},Cpu=${args.cpu},Memory=${args.memory},DomainName=${args.name} --namespace=${args.name}"
+//     } else {
+//         println "Running deployment"
+//         sh "/usr/local/bin/helm upgrade --install ${args.name} ${args.chart_dir} --set ImageTag=${args.tag},Replicas=${args.replicas},Cpu=${args.cpu},Memory=${args.memory},DomainName=${args.name} --namespace=${args.name}"
+
+//         echo "Application ${args.name} successfully deployed. Use helm status ${args.name} to check"
+//     }
 // }
 // }
-def helmLint(String chart_dir) {
-    container('helm') {
-    // lint helm chart
-    sh "/usr/local/bin/helm lint ${chart_dir}"
-
-}
-}
-def helmDeploy(Map args) {
-    //configure helm client and confirm tiller process is installed
-container('helm'){
-    if (args.dry_run) {
-        println "Running dry-run deployment"
-
-        sh "/usr/local/bin/helm upgrade --dry-run --debug --install ${args.name} ${args.chart_dir} --set ImageTag=${args.tag},Replicas=${args.replicas},Cpu=${args.cpu},Memory=${args.memory},DomainName=${args.name} --namespace=${args.name}"
-    } else {
-        println "Running deployment"
-        sh "/usr/local/bin/helm upgrade --install ${args.name} ${args.chart_dir} --set ImageTag=${args.tag},Replicas=${args.replicas},Cpu=${args.cpu},Memory=${args.memory},DomainName=${args.name} --namespace=${args.name}"
-
-        echo "Application ${args.name} successfully deployed. Use helm status ${args.name} to check"
-    }
-}
-}
 
 
 
@@ -172,9 +175,11 @@ node {
     }
     }
     stage ('helm test') {
-        
+        container('helm') {
+    // lint helm chart
+    sh "/usr/local/bin/helm lint ${chart_dir}"
     // run helm chart linter
-      helmLint(chart_dir)
+     
 
     // run dry-run helm chart installation
       helmDeploy(
@@ -186,13 +191,24 @@ node {
         cpu           : config.app.cpu,
         memory        : config.app.memory
        )
-
+        }
     }
     
     stage ('helm deploy') {
       
       // Deploy using Helm chart
-      helmDeploy(
+      container('helm'){
+    if (args.dry_run) {
+        println "Running dry-run deployment"
+
+        sh "/usr/local/bin/helm upgrade --dry-run --debug --install ${args.name} ${args.chart_dir} --set ImageTag=${args.tag},Replicas=${args.replicas},Cpu=${args.cpu},Memory=${args.memory},DomainName=${args.name} --namespace=${args.name}"
+    } else {
+        println "Running deployment"
+        sh "/usr/local/bin/helm upgrade --install ${args.name} ${args.chart_dir} --set ImageTag=${args.tag},Replicas=${args.replicas},Cpu=${args.cpu},Memory=${args.memory},DomainName=${args.name} --namespace=${args.name}"
+
+        echo "Application ${args.name} successfully deployed. Use helm status ${args.name} to check"
+    }
+}
         dry_run       : false,
         name          : config.app.name,
         chart_dir     : chart_dir,
@@ -200,7 +216,7 @@ node {
         replicas      : config.app.replicas,
         cpu           : config.app.cpu,
         memory        : config.app.memory
-      )
+      
 
     }
     
@@ -213,4 +229,6 @@ node {
     // 3. Should be able to parallelize the docker.withRegistry() methods to ensure the container is running on the slave
     // 4. After the tests finish (and before they start), clean up container images to prevent stale docker image builds from affecting the current test run
 }
+}
+        }
 }
