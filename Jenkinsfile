@@ -148,7 +148,7 @@ node(label) {
         cpu           : config.app.cpu,
         memory        : config.app.memory
        )
-        container('helm') {
+    
     // lint helm chart
     sh "/usr/local/bin/helm lint ${chart_dir}"
     // run helm chart linter
