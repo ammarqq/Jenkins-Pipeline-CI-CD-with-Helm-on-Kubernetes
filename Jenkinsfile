@@ -23,11 +23,7 @@ volumes:[
 //     sh "kubectl get nodes"k
 
 
-def helmLint(String chart_dir) {
-    // lint helm chart
-    sh "/usr/local/bin/helm lint ${chart_dir}"
 
-}
 
 def helmDeploy(Map args) {
     //configure helm client and confirm tiller process is installed
@@ -133,6 +129,11 @@ node(label) {
     }
     }
     stage ('helm test') {
+        def helmLint(String chart_dir) {
+    // lint helm chart
+    sh "/usr/local/bin/helm lint ${chart_dir}"
+
+}
         container('helm') {
  helmDeploy(
         dry_run       : true,
