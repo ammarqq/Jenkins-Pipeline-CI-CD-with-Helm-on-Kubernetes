@@ -73,11 +73,13 @@ node(label) {
         maintainer_name = "ammarqqqq"
         container_name = "nginx-test"
         
-        container('docker') {
+        
         stage "Building"
         
         echo "Building Nginx with docker.build(${maintainer_name}/${container_name}:${build_tag})"
+        container('docker'){
         container = docker.build("${maintainer_name}/${container_name}:${build_tag}", '.')
+        
         try {
             
             // Start Testing
