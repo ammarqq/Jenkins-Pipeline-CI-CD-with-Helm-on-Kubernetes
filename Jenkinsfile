@@ -1,21 +1,34 @@
 #!groovy
+def label = "worker-${UUID.randomUUID().toString()}"
+podTemplate(label: 'jenkins-pipeline', containers: [
+    containerTemplate(name: 'jnlp', image: 'lachlanevenson/jnlp-slave:3.10-1-alpine', args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins', resourceRequestCpu: '200m', resourceLimitCpu: '300m', resourceRequestMemory: '256Mi', resourceLimitMemory: '512Mi'),
+    containerTemplate(name: 'docker', image: 'docker:1.12.6', command: 'cat', ttyEnabled: true),
+    containerTemplate(name: 'golang', image: 'golang:1.8.3', command: 'cat', ttyEnabled: true),
+    containerTemplate(name: 'helm', image: 'lachlanevenson/k8s-helm:v2.6.0', kubeconfig=.kube-config, command: 'cat', ttyEnabled: true),
+    containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl:v1.4.8', command: 'cat', ttyEnabled: true)
+],
+volumes:[
+    hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
+]){
 
-def kubectlTest() {
+def  kubectlTest() {
+    container('kubectl'){
     // Test that kubectl can correctly communication with the Kubernetes API
     echo "running kubectl test"
     sh "kubectl get nodes"
 
 }
-
+}
 def helmLint(String chart_dir) {
+    container('helm') {
     // lint helm chart
     sh "/usr/local/bin/helm lint ${chart_dir}"
 
 }
-
+}
 def helmDeploy(Map args) {
     //configure helm client and confirm tiller process is installed
-
+container('helm'){
     if (args.dry_run) {
         println "Running dry-run deployment"
 
@@ -27,7 +40,7 @@ def helmDeploy(Map args) {
         echo "Application ${args.name} successfully deployed. Use helm status ${args.name} to check"
     }
 }
-
+}
 
 
 
@@ -55,8 +68,9 @@ node {
         maintainer_name = "ammarqqqq"
         container_name = "nginx-test"
         
-
+       
         stage "Building"
+         container('docker') {
         echo "Building Nginx with docker.build(${maintainer_name}/${container_name}:${build_tag})"
         container = docker.build("${maintainer_name}/${container_name}:${build_tag}", '.')
         try {
@@ -155,7 +169,7 @@ node {
         currentBuild.result = 'SUCCESS'
         
     }
-    
+    }
     stage ('helm test') {
         
     // run helm chart linter
@@ -197,4 +211,5 @@ node {
     // 2. Make sure to set the Pipeline's "Throttle builds" to 1 because the docker containers will collide on resources like ports and names
     // 3. Should be able to parallelize the docker.withRegistry() methods to ensure the container is running on the slave
     // 4. After the tests finish (and before they start), clean up container images to prevent stale docker image builds from affecting the current test run
+}
 }
