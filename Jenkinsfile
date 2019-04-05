@@ -24,8 +24,8 @@ volumes:[
 
 
 // }
-//  def helmLint(String chart_dir)
-//  def helmDeploy(Map args)
+  def helmLint(String chart_dir)
+  def helmDeploy(Map args)
 
 //     container('helm') {
 //     // lint helm chart
