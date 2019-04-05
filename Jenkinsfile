@@ -24,8 +24,8 @@ volumes:[
 
 
 // }
-  def helmLint(String chart_dir)
-  def helmDeploy(Map args)
+//   def helmLint(String chart_dir)
+//   def helmDeploy(Map args)
 
 //     container('helm') {
 //     // lint helm chart
@@ -57,7 +57,8 @@ node(label) {
     registry_url = "https://index.docker.io/v1/" // Docker Hub
     docker_creds_id = "dockerhub" // name of the Jenkins Credentials ID
     build_tag = "${env.BUILD_ID}" // default tag to push for to the registry
-    
+    def helmLint(String chart_dir)
+    def helmDeploy(Map args)
     def pwd = pwd()
     def chart_dir = "${pwd}/charts/newegg-nginx"
         
