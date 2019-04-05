@@ -57,8 +57,8 @@ node(label) {
     registry_url = "https://index.docker.io/v1/" // Docker Hub
     docker_creds_id = "dockerhub" // name of the Jenkins Credentials ID
     build_tag = "${env.BUILD_ID}" // default tag to push for to the registry
-    def helmLint(String chart_dir)
-    def helmDeploy(Map args)
+    // def helmLint(String chart_dir)
+    // def helmDeploy(Map args)
     def pwd = pwd()
     def chart_dir = "${pwd}/charts/newegg-nginx"
         
@@ -139,7 +139,8 @@ node(label) {
     }
     stage ('helm test') {
          container('helm') {
-    // helmLint(String chart_dir)
+           helmDeploy(Map args)         
+           helmLint(String chart_dir)
  helmDeploy(
         dry_run       : true,
         name          : config.app.name,
@@ -164,7 +165,8 @@ node(label) {
     
     stage ('helm deploy') {
         container('helm'){
-      helmDeploy(Map args)
+        helmDeploy(Map args)         
+        helmLint(String chart_dir)
       helmDeploy(
         dry_run       : false,
         name          : config.app.name,
