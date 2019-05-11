@@ -25,28 +25,28 @@ volumes:[
 
 // }
 //   def helmLint(String chart_dir)
-//   def helmDeploy(Map args)
+ //  def helmDeploy(Map args)
 
 //     container('helm') {
 //     // lint helm chart
 //     sh "/usr/local/bin/helm lint ${chart_dir}"
 
 
-// def helmDeploy(Map args) {
-//     //configure helm client and confirm tiller process is installed
-// container('helm'){
-//     if (args.dry_run) {
-//         println "Running dry-run deployment"
+def helmDeploy(Map args) {
+    //configure helm client and confirm tiller process is installed
+container('helm'){
+    if (args.dry_run) {
+        println "Running dry-run deployment"
 
-//         sh "/usr/local/bin/helm upgrade --dry-run --debug --install ${args.name} ${args.chart_dir} --set ImageTag=${args.tag},Replicas=${args.replicas},Cpu=${args.cpu},Memory=${args.memory},DomainName=${args.name} --namespace=${args.name}"
-//     } else {
-//         println "Running deployment"
-//         sh "/usr/local/bin/helm upgrade --install ${args.name} ${args.chart_dir} --set ImageTag=${args.tag},Replicas=${args.replicas},Cpu=${args.cpu},Memory=${args.memory},DomainName=${args.name} --namespace=${args.name}"
+        sh "/usr/local/bin/helm upgrade --dry-run --debug --install ${args.name} ${args.chart_dir} --set ImageTag=${args.tag},Replicas=${args.replicas},Cpu=${args.cpu},Memory=${args.memory},DomainName=${args.name} --namespace=${args.name}"
+    } else {
+        println "Running deployment"
+        sh "/usr/local/bin/helm upgrade --install ${args.name} ${args.chart_dir} --set ImageTag=${args.tag},Replicas=${args.replicas},Cpu=${args.cpu},Memory=${args.memory},DomainName=${args.name} --namespace=${args.name}"
 
-//         echo "Application ${args.name} successfully deployed. Use helm status ${args.name} to check"
-//     }
-// }
-// }
+        echo "Application ${args.name} successfully deployed. Use helm status ${args.name} to check"
+    }
+}
+ }
 
 
 
@@ -90,7 +90,7 @@ node(label) {
             stage "Running Nginx container"
             
             // Run the container with the env file, mounted volumes and the ports:
-            docker.image("${maintainer_name}/${container_name}:${build_tag}").withRun("--name=${container_name}  -p 80:80 ")  { c ->
+            // docker.image("${maintainer_name}/${container_name}:${build_tag}").withRun("--name=${container_name}  -p 80:80 ")  { c ->
                    
                 // wait for the django server to be ready for testing
                 // the 'waitUntil' block needs to return true to stop waiting
@@ -116,18 +116,19 @@ node(label) {
                 // } // end of waitUntil
                 
                 // At this point Nginx is running
-                echo "Docker Container is running"
-                input 'You can Check the running Docker Container on docker builder server now! Click process to the next stage!!'    
+                // echo "Docker Container is running"
+                // input 'You can Check the running Docker Container on docker builder server now! Click process to the next stage!!'    
                 // this pipeline is using 3 tests 
                 // by setting it to more than 3 you can test the error handling and see the pipeline Stage View error message
          
             }
             
-        } catch (Exception err) {
-            err_msg = "Test had Exception(${err})"
-            currentBuild.result = 'FAILURE'
-            error "FAILED - Stopping build for Error(${err_msg})"
-        }
+        } 
+        // catch (Exception err) {
+        //     err_msg = "Test had Exception(${err})"
+        //     currentBuild.result = 'FAILURE'
+        //     error "FAILED - Stopping build for Error(${err_msg})"
+        // }
         
         stage "Pushing"
         input 'Do you approve Pushing?'
@@ -137,35 +138,35 @@ node(label) {
         
     }
     }
-    stage ('helm test') {
-         container('helm') {
+//     stage ('helm test') {
+//          container('helm') {
                     
-        //    helmLint(String chart_dir)
- helmDeploy(
-        dry_run       : true,
-        name          : config.app.name,
-        chart_dir     : chart_dir,
-        tag           : build_tag,
-        replicas      : config.app.replicas,
-        cpu           : config.app.cpu,
-        memory        : config.app.memory
-       )
+//         //    helmLint(String chart_dir)
+//  helmDeploy(
+//         dry_run       : true,
+//         name          : config.app.name,
+//         chart_dir     : chart_dir,
+//         tag           : build_tag,
+//         replicas      : config.app.replicas,
+//         cpu           : config.app.cpu,
+//         memory        : config.app.memory
+//        )
     
-    // lint helm chart
-    sh "/usr/local/bin/helm lint ${chart_dir}"
-    // run helm chart linter
+//     // lint helm chart
+//     sh "/usr/local/bin/helm lint ${chart_dir}"
+//     // run helm chart linter
      
 
-    // run dry-run helm chart installation
+//     // run dry-run helm chart installation
       
 
        
-        }
-    }
+//         }
+//     }
     
     stage ('helm deploy') {
         container('helm'){
-        // helmDeploy(Map args)         
+        //   helmDeploy(Map args)         
         // helmLint(String chart_dir)
       helmDeploy(
         dry_run       : false,
@@ -177,16 +178,16 @@ node(label) {
         memory        : config.app.memory
       )
       // Deploy using Helm chart
-      sh "/usr/local/bin/helm lint ${chart_dir}"
-    if (args.dry_run) {
-        println "Running dry-run deployment"
+    //   sh "/usr/local/bin/helm lint ${chart_dir}"
+    // if (args.dry_run) {
+    //     println "Running dry-run deployment"
 
-        sh "/usr/local/bin/helm upgrade --dry-run --debug --install ${args.name} ${args.chart_dir} --set ImageTag=${args.tag},Replicas=${args.replicas},Cpu=${args.cpu},Memory=${args.memory},DomainName=${args.name} --namespace=${args.name}"
-    } else {
-        println "Running deployment"
-        sh "/usr/local/bin/helm upgrade --install ${args.name} ${args.chart_dir} --set ImageTag=${args.tag},Replicas=${args.replicas},Cpu=${args.cpu},Memory=${args.memory},DomainName=${args.name} --namespace=${args.name}"
+    //     sh "/usr/local/bin/helm upgrade --dry-run --debug --install ${args.name} ${args.chart_dir} --set ImageTag=${args.tag},Replicas=${args.replicas},Cpu=${args.cpu},Memory=${args.memory},DomainName=${args.name} --namespace=${args.name}"
+    // } else {
+    //     println "Running deployment"
+    //     sh "/usr/local/bin/helm upgrade --install ${args.name} ${args.chart_dir} --set ImageTag=${args.tag},Replicas=${args.replicas},Cpu=${args.cpu},Memory=${args.memory},DomainName=${args.name} --namespace=${args.name}"
 
-        echo "Application ${args.name} successfully deployed. Use helm status ${args.name} to check"
+        // echo "Application ${args.name} successfully deployed. Use helm status ${args.name} to check"
     }
 }
 
