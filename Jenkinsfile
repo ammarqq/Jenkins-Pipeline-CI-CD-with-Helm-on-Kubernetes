@@ -185,6 +185,14 @@ node(label) {
 
 
     }
+    return this
+    
+    stage 
+    ('egg_url'){
+        container('kubectl'){
+            sh 'kubectl get ingress -n newegg newegg-newegg-nginx -o jsonpath="{.spec.rules[0].host}"'
+        }
+    }
 
     ///////////////////////////////////////
     //
@@ -202,4 +210,3 @@ node(label) {
         }
 }
 }
-return this
