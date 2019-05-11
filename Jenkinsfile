@@ -12,9 +12,7 @@ podTemplate(label: label, containers: [
 volumes:[
     hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
 ]){
-        node(label) {
-        def externalMethod
-def pwd = pwd()
+    def pwd = pwd()
 def chart_dir = "${pwd}/charts/newegg-nginx"
 
 def helmDeploy(Map args) {
@@ -30,6 +28,9 @@ def helmDeploy(Map args) {
         echo "Application ${args.name} successfully deployed. Use helm status ${args.name} to check"
     }
 }
+        node(label) {
+        def externalMethod
+
        
 
         try {
