@@ -13,6 +13,9 @@ volumes:[
 ]){
         node(label) {
         def externalMethod
+    def pwd = pwd()
+    def chart_dir = "${pwd}/charts/newegg-nginx"
+
 
         try {
             deleteDir()
@@ -59,8 +62,7 @@ node(label) {
     build_tag = "${env.BUILD_ID}" // default tag to push for to the registry
     //  def helmLint(String chart_dir)
     //  def helmDeploy(Map args)
-    def pwd = pwd()
-    def chart_dir = "${pwd}/charts/newegg-nginx"
+
         
     stage 'Checking out GitHub Repo'
     git url: 'https://github.com/ammarqq/Jenkins-Pipeline-CI-CD-with-Helm-on-Kubernetes.git'
@@ -165,17 +167,8 @@ node(label) {
     
     stage ('helm deploy') {
         container('helm'){
-        // helmDeploy(Map args)         
-         helmLint(chart_dir)
-      helmDeploy(
-        dry_run       : false,
-        name          : config.app.name,
-        chart_dir     : chart_dir,
-        tag           : build_tag,
-        replicas      : config.app.replicas,
-        cpu           : config.app.cpu,
-        memory        : config.app.memory
-      )
+         sh helm upgrade --install --force --wait --set Imagetag=${build_tag}  newegg charts/newegg-nginx
+      
       // Deploy using Helm chart
 //       sh "/usr/local/bin/helm lint ${chart_dir}"
 //     if (args.dry_run) {
