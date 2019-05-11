@@ -167,14 +167,7 @@ node(label) {
     
     stage ('helm deploy') {
         container('helm'){
-         sh "helm upgrade \
-         --install --force --wait \
-         --timeout 900 \
-         --set Image=ammarqqqq/nginx-test \
-         --set ImageTag=$image_tag \
-         --namespace=newegg \
-         newegg \
-         charts/newegg-nginx"
+         sh ".deploy.sh"
       
       // Deploy using Helm chart
 //       sh "/usr/local/bin/helm lint ${chart_dir}"
