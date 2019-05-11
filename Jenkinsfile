@@ -167,7 +167,7 @@ node(label) {
     
     stage ('helm deploy') {
         container('helm'){
-         sh ".deploy.sh"
+         sh ". .deploy.sh"
       
       // Deploy using Helm chart
 //       sh "/usr/local/bin/helm lint ${chart_dir}"
