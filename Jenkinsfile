@@ -19,7 +19,6 @@ def chart_dir = "${pwd}/charts/newegg-nginx"
 
 def helmDeploy(Map args) {
     //configure helm client and confirm tiller process is installed
-container('helm'){
     if (args.dry_run) {
         println "Running dry-run deployment"
 
@@ -31,7 +30,7 @@ container('helm'){
         echo "Application ${args.name} successfully deployed. Use helm status ${args.name} to check"
     }
 }
-}        
+       
 
         try {
             deleteDir()
@@ -183,7 +182,7 @@ node(label) {
 //     }
     
     stage ('helm deploy') {
-        // container('helm'){
+         container('helm'){
         // helmDeploy(Map args)         
         // helmLint(String chart_dir)
       helmDeploy(
@@ -207,7 +206,7 @@ node(label) {
 
     //     echo "Application ${args.name} successfully deployed. Use helm status ${args.name} to check"
     // }
-// }
+ }
 
 
     }
