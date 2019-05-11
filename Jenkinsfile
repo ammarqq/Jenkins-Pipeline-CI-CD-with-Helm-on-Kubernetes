@@ -170,7 +170,7 @@ node(label) {
          sh "helm upgrade \
          --install --force --wait \
          --timeout 600 \
-         --set Image=ammarqqqq/nginx-test
+         --set Image=ammarqqqq/nginx-test \
          --set ImageTag=$image_tag \
          newegg \
          charts/newegg-nginx"
