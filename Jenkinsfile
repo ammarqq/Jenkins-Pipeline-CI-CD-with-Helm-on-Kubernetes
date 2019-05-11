@@ -129,7 +129,7 @@ node(label) {
         //     error "FAILED - Stopping build for Error(${err_msg})"
         // }
         
-        stage "Pushing"
+        stage "Pushing" {
         // input 'Do you approve Pushing?'
         container.push()
         
@@ -207,5 +207,6 @@ node(label) {
 } catch (exception) {
             throw exception
         }
+}
 }
 }
