@@ -132,7 +132,7 @@ node(label) {
         // }
         
         stage "Pushing"
-        input 'Do you approve Pushing?'
+        // input 'Do you approve Pushing?'
         container.push()
         
         currentBuild.result = 'SUCCESS'
