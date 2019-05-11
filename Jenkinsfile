@@ -5,7 +5,7 @@ podTemplate(label: label, containers: [
     containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true),
     // containerTemplate(name: 'golang', image: 'golang:1.8.3', command: 'cat', ttyEnabled: true),
                                                                             //  , kubeconfig=.kube-config
-    containerTemplate(name: 'helm', image: 'lachlanevenson/k8s-helm:v2.6.0', command: 'cat', ttyEnabled: true),
+    containerTemplate(name: 'helm', image: 'lachlanevenson/k8s-helm:v2.11.0', command: 'cat', ttyEnabled: true),
     containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl:v1.4.8', command: 'cat', ttyEnabled: true)
 ],
 volumes:[
@@ -167,7 +167,11 @@ node(label) {
     
     stage ('helm deploy') {
         container('helm'){
-         sh 'helm upgrade --install --force --wait  --set Imagetag=$image_tag newegg charts/newegg-nginx'
+         sh "helm upgrade \
+         --install --force --wait \
+         --set ImageTag=$image_tag \
+         newegg \
+         charts/newegg-nginx"
       
       // Deploy using Helm chart
 //       sh "/usr/local/bin/helm lint ${chart_dir}"
