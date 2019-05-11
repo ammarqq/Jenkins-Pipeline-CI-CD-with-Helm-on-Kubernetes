@@ -50,7 +50,7 @@ volumes:[
 
 
 
-// 
+node(label) {
 
     
     // Setup the Docker Registry (Docker Hub) + Credentials 
