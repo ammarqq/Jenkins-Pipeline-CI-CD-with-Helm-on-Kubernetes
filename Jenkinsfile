@@ -167,7 +167,7 @@ node(label) {
     
     stage ('helm deploy') {
         container('helm'){
-         sh 'helm upgrade --install --force --wait   newegg charts/newegg-nginx'
+         sh 'helm upgrade --install --force --wait  --set-string Imagetag=$image_tag newegg charts/newegg-nginx'
       
       // Deploy using Helm chart
 //       sh "/usr/local/bin/helm lint ${chart_dir}"
