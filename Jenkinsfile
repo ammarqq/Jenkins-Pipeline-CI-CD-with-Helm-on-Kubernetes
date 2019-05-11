@@ -24,7 +24,7 @@ volumes:[
 
 
 // }
-  def helmLint(String chart_dir)
+  
 //   def helmDeploy(Map args)
 
 //     container('helm') {
@@ -166,7 +166,7 @@ node(label) {
     stage ('helm deploy') {
         container('helm'){
         // helmDeploy(Map args)         
-         helmLint(String chart_dir)
+         helmLint(chart_dir)
       helmDeploy(
         dry_run       : false,
         name          : config.app.name,
