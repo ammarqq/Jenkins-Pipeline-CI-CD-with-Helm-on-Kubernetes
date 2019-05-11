@@ -50,7 +50,7 @@ volumes:[
 
 
 
- 
+node(label) {
 
     
     // Setup the Docker Registry (Docker Hub) + Credentials 
@@ -59,7 +59,8 @@ volumes:[
     build_tag = "${env.BUILD_ID}" // default tag to push for to the registry
     //  def helmLint(String chart_dir)
     //  def helmDeploy(Map args)
-
+    def pwd = pwd()
+    def chart_dir = "${pwd}/charts/newegg-nginx"
         
     stage 'Checking out GitHub Repo'
     git url: 'https://github.com/ammarqq/Jenkins-Pipeline-CI-CD-with-Helm-on-Kubernetes.git'
