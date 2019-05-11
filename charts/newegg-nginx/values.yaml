@@ -5,8 +5,8 @@
 
 ServiceType: NodePort
 Image: ammarqqqq/nginx-test
-Imagetag: 'latest'
-Replicas: 3
+Imagetag: ${build_tag}
+Replicas: 1
 ImagePullPolicy: "Always"
 Cpu: "10m"
 Memory: "128Mi"
