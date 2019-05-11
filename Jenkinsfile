@@ -172,7 +172,7 @@ node(label) {
          --timeout 900 \
          --set Image=ammarqqqq/nginx-test \
          --set ImageTag=$image_tag \
-         --namespace=newegg
+         --namespace=newegg \
          newegg \
          charts/newegg-nginx"
       
